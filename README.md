@@ -1,4 +1,4 @@
-# AWS Cybersecurity Lab (Attack & Detection Environment)
+# AWS Cybersecurity SOC Lab (Attack & Detection Environment)
 
 ![AWS Cyber Lab Architecture](aws-cyber-lab-architecture.png)
 
