@@ -9,6 +9,15 @@ This project demonstrates a hands-on cybersecurity lab built in Amazon Web Servi
 
 ---
 
+## What This Demonstrates
+
+- Simulated real-world cyber attacks (Nmap, Hydra)
+- Detected threats using SIEM (ELK Stack)
+- Correlated attacks across Linux and Windows systems
+- Built full cloud infrastructure in AWS (VPC, routing, security groups)
+
+---
+
 ## Architecture
 - AWS VPC (10.0.0.0/16)
 - Kali Linux (Attacker)
