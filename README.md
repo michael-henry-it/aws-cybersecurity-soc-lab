@@ -1,159 +1,232 @@
 # AWS Cybersecurity SOC Lab (Attack & Detection Environment)
 
-![AWS Cyber Lab Architecture](aws-cyber-lab-architecture.png)
+---
+
+## 🧩 Architecture Diagram
+
+
+    Attacker (Kali Linux)
+    ─────────────────────
+    Tools: Nmap, Hydra
+            │
+            ▼
+ ┌───────────────────────┐
+ │     Target Systems     │
+ ├───────────────────────┤
+ │ Ubuntu Server (SSH)   │
+ │ - /var/log/auth.log   │
+ │                       │
+ │ Windows Server (RDP)  │
+ │ - Event ID 4625       │
+ └──────────┬────────────┘
+            │
+            ▼
+    ┌───────────────────┐
+    │   Wazuh Server     │
+    │ (SIEM - Ubuntu)    │
+    │ - Log ingestion    │
+    │ - Detection rules  │
+    └──────────┬────────┘
+               │
+               ▼
+    ┌───────────────────┐
+    │ Wazuh Dashboard    │
+    │ Alerts & Analysis  │
+    └───────────────────┘
+
+    
+---
+
+## 📌 Overview
+
+This project demonstrates a full Security Operations Center (SOC) lab built in AWS.  
+It simulates real-world brute-force attacks against Linux and Windows systems and validates detection using a centralized Wazuh SIEM.
 
 ---
 
-## 🚨 Overview
+## 🧭 Lab Workflow (Actual Execution Order)
 
-This project simulates a real-world Security Operations Center (SOC) environment built in Amazon Web Services (AWS). It demonstrates both offensive security techniques and defensive detection using centralized logging and SIEM tools.
-
----
-
-## 🔥 What This Demonstrates
-
-* Simulated real-world cyber attacks (Nmap, Hydra)
-* Detected threats using SIEM (ELK Stack)
-* Correlated attacks across Linux and Windows systems
-* Built full cloud infrastructure in AWS (VPC, subnets, routing, security groups)
-* Implemented alerting and incident response workflow
+1. Build AWS infrastructure (EC2 instances + networking)
+2. Configure target systems (Ubuntu + Windows Server)
+3. Deploy Wazuh SIEM (server + dashboard)
+4. Install and configure Wazuh agents
+5. Simulate attacks using Kali (Hydra + Nmap)
+6. Validate logs on each target system
+7. Confirm detection inside Wazuh dashboard
 
 ---
 
-## 🧠 Architecture
+## 🧱 Environment Setup
 
-* AWS VPC (10.0.0.0/16)
-* Kali Linux (Attacker)
-* Ubuntu Server (Linux Target)
-* Windows Server 2022 (Target)
-* Internet Gateway + Route Tables
-* Security Groups (Controlled Access)
+### 🔹 Attacker
+- Kali Linux (Ubuntu-based)
+- Tools: Nmap, Hydra
 
----
+### 🔹 Targets
+- Ubuntu Server (SSH + Apache)
+- Windows Server 2022 (RDP enabled)
 
-## ⚔️ Attack Simulation
-
-* Network reconnaissance using **Nmap**
-* Brute-force attacks using **Hydra**
-
-  * SSH (Linux)
-  * RDP (Windows)
+### 🔹 SIEM
+- Wazuh Server (Ubuntu)
+- Wazuh Dashboard (HTTPS)
 
 ---
 
-## 🔍 Detection & Logging
+## ⚙️ Technologies Used
 
-### Linux
-
-* Log file: `/var/log/auth.log`
-* Detected failed SSH login attempts
-
-### Windows
-
-* Event Viewer → Security Logs
-* Event ID **4625** (Failed logins)
+- AWS EC2
+- Wazuh SIEM (Manager, Agents, Dashboard)
+- Ubuntu Linux
+- Windows Server 2022
+- Hydra (Brute-force tool)
+- Nmap (Network scanning)
+- SSH / RDP
 
 ---
 
-## 📊 SIEM Integration (ELK Stack)
-
-To simulate a real SOC, the lab integrates the ELK Stack:
-
-* **Elasticsearch** – log storage and indexing
-* **Logstash** – log ingestion and parsing
-* **Kibana** – visualization dashboards
-
-### Log Sources
-
-* Linux: `/var/log/auth.log`
-* Windows: Security logs via Winlogbeat
-
-### Detection Logic
-
-* Failed SSH login attempts
-* Failed RDP login attempts
-* Brute-force thresholds (>5 attempts per minute)
+# 🔐 Attack Simulation & Detection (STEP-BY-STEP)
 
 ---
 
-## 🚨 Alerts & Detection
+## 🐉 1. Reconnaissance (Kali)
 
-Implemented alerting in Kibana:
+- Identified open ports using Nmap
+- Discovered:
+  - SSH (22) on Ubuntu
+  - RDP (3389) on Windows
 
-* Trigger: More than 5 failed login attempts within 1 minute
-* Queries:
-
-  * `"Failed password"` (Linux)
-  * `event.code:4625` (Windows)
-
----
-
-## 🧪 Attack Scenario
-
-1. Kali Linux performs reconnaissance using Nmap
-2. Hydra executes brute-force attacks against SSH and RDP
-3. Logs are generated on Ubuntu and Windows systems
-4. ELK Stack ingests and analyzes logs
-5. Alerts trigger for suspicious activity
-6. Activity is investigated and documented
+![Nmap Scan Ubuntu](screenshots/01-attacker-kali/nmap-scan-ubuntu.png)
+![Nmap Scan Windows](screenshots/01-attacker-kali/nmap-scan-windows.png)
 
 ---
 
-## 📊 Dashboard Example
+## 🐉 2. SSH Brute Force Attack (Ubuntu)
 
-![Kibana Dashboard](screenshots/kibana-dashboard.png)
+- Tool: Hydra
+- Target: Ubuntu SSH
+- Wordlist: rockyou.txt
 
----
-
-## 📝 Incident Response Workflow
-
-1. **Detection** – Alert triggered in SIEM
-2. **Triage** – Identify source IP and affected systems
-3. **Investigation** – Analyze logs in Kibana
-4. **Correlation** – Link Linux + Windows attack activity
-5. **Response** – Simulated blocking of attacker IP
+![Hydra SSH Attack](screenshots/01-attacker-kali/hydra-ssh-attack.png)
 
 ---
 
-## 🛠 Tools Used
+## 🐧 3. Linux Log Validation
 
-* Nmap
-* Hydra
-* ELK Stack (Elasticsearch, Logstash, Kibana)
-* Winlogbeat
-* AWS (EC2, VPC, Security Groups)
+- Checked `/var/log/auth.log`
+- Observed multiple failed login attempts
 
----
-
-## 💡 Key Skills Demonstrated
-
-* AWS Networking (VPC, Subnets, Routing, Security Groups)
-* Offensive Security (Scanning, Brute Force Attacks)
-* Log Analysis & Threat Detection
-* SIEM Implementation (ELK Stack)
-* Incident Response & Correlation
+![Ubuntu Auth Logs](screenshots/02-target-ubuntu/ubuntu-auth-log-failures.png)
 
 ---
 
-## 🔁 How to Reproduce
+## 🐉 4. RDP Brute Force Attack (Windows)
 
-1. Launch EC2 instances (Kali, Ubuntu, Windows)
-2. Configure Security Groups (SSH, RDP, internal traffic)
-3. Run attacks from Kali:
+- Tool: Hydra
+- Target: Windows RDP
 
-   ```
-   nmap <target>
-   hydra -l ubuntu -P rockyou.txt ssh://<target>
-   ```
-4. Monitor logs:
+![Hydra RDP Attack](screenshots/01-attacker-kali/hydra-rdp-attack.png)
 
-   * `/var/log/auth.log`
-   * Windows Event Viewer
-5. View logs in Kibana dashboard
+---
+
+## 🪟 5. Windows Log Validation
+
+- Opened Event Viewer → Security Logs
+- Filtered for:
+
+![Windows 4625 Logs](screenshots/03-target-windows/windows-4625-failures.png)
+
+---
+
+## 🧠 6. SIEM Detection (Wazuh)
+
+All logs were ingested and correlated in Wazuh:
+
+- SSH brute-force detected (Linux)
+- RDP brute-force detected (Windows)
+- Source attacker IP identified
+
+![Wazuh Dashboard](screenshots/04-wazuh-siem/wazuh-dashboard-login.png)
+![Agents Active](screenshots/04-wazuh-siem/wazuh-agents-active.png)
+![SSH Detection](screenshots/04-wazuh-siem/wazuh-ssh-detection.png)
+![RDP Detection](screenshots/04-wazuh-siem/wazuh-rdp-detection.png)
+
+---
+
+# 🔎 Detection Details
+
+## Linux (Ubuntu)
+- Log: `/var/log/auth.log`
+- Detection: Failed SSH login attempts
+- Result: Alert generated in Wazuh
+
+---
+
+## Windows Server
+- Log: Windows Security Logs
+- Event ID: 4625
+- Detection: Failed RDP login attempts
+- Result: Alert generated in Wazuh
+
+---
+
+# 📊 SIEM Capabilities Demonstrated
+
+- Centralized log collection (Linux + Windows)
+- Real-time brute-force detection
+- Cross-platform log correlation
+- Source IP tracking
+- Dashboard-based alert visualization
+
+---
+
+# 🛠️ Challenges & Fixes (REAL EXPERIENCE)
+
+- Fixed Wazuh agent misconfiguration (`0.0.0.0` issue)
+- Resolved agent version mismatch errors
+- Enabled SSH password authentication for testing
+- Configured AWS Security Groups (22, 3389, 1514, 443)
+- Troubleshot service failures and connectivity issues
+
+---
+
+# 🧠 SOC Analyst Perspective
+
+If this were a real SOC environment:
+
+- Investigate attacker IP reputation
+- Correlate activity across systems
+- Check for successful login after failures
+- Apply account lockout policies
+- Escalate if lateral movement suspected
+
+---
+
+# 🚨 Detection Improvement Idea
+
+- Alert if >5 failed logins within 1 minute
+- Correlate across Linux + Windows
+- Reduce false positives and improve detection accuracy
+
+---
+
+# 📁 Screenshot Structure
+
+/screenshots
+├── 01-attacker-kali
+├── 02-target-ubuntu
+├── 03-target-windows
+├── 04-wazuh-siem
+
+---
+
+# 💬 Summary
+
+This lab demonstrates the full SOC workflow:
+
+Attack → Log Generation → Log Collection → SIEM Detection → Alert Analysis
 
 ---
 
 ## 👤 Author
 
 Michael Henry
-
