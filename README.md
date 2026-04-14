@@ -4,7 +4,8 @@
 
 ## 🧩 Architecture Diagram
 
-/screenshots/04-wazuh-siem/architecture-diagram.png
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/46bbdb94-659d-4af1-9df2-1a3ad6235435" />
+
 
 ---
 
