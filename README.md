@@ -4,7 +4,7 @@
 
 ## 🧩 Architecture Diagram
 
-architecture-diagram.png
+![Architecture Diagram](screenshots/04-wazuh-siem/architecture-diagram.png)
 
 ---
 
