@@ -1,4 +1,116 @@
-# Nmap Scan
+========================
+AWS SOC LAB COMMANDS
+========================
+
+---------------------------------
+KALI (ATTACKER)
+---------------------------------
+
+# Nmap scan - Ubuntu
+nmap <ubuntu-public-ip>
+
+# Nmap scan - Windows (force scan)
+nmap -Pn <windows-public-ip>
+
+# SSH brute force attack
+hydra -l ubuntu -P ~/rockyou.txt ssh://<ubuntu-public-ip>
+
+# RDP brute force attack
+hydra -l administrator -P ~/rockyou.txt rdp://<windows-public-ip>
+
+
+---------------------------------
+UBUNTU TARGET
+---------------------------------
+
+# Update system
+sudo apt update && sudo apt upgrade -y
+
+# Install Apache (for visibility)
+sudo apt install apache2 -y
+sudo systemctl start apache2
+sudo systemctl enable apache2
+
+# Install tools
+sudo apt install nmap hydra netcat-openbsd curl git -y
+
+# Enable SSH password authentication
+sudo nano /etc/ssh/sshd_config
+# Set:
+PasswordAuthentication yes
+
+sudo systemctl restart ssh
+
+# View logs
+sudo tail -f /var/log/auth.log
+
+
+---------------------------------
+WAZUH SERVER
+---------------------------------
+
+# Install Wazuh (ignore OS check)
+curl -sO https://packages.wazuh.com/4.7/wazuh-install.sh
+sudo bash wazuh-install.sh -a -i
+
+# Check services
+sudo systemctl status wazuh-dashboard
+sudo systemctl status wazuh-manager
+
+# Check listening ports
+sudo ss -tulnp | grep -E '443|5601'
+
+
+---------------------------------
+UBUNTU AGENT INSTALL
+---------------------------------
+
+# Install agent
+curl -sO https://packages.wazuh.com/4.x/wazuh-agent.sh
+sudo bash wazuh-agent.sh -a
+
+# Configure manager
+sudo nano /var/ossec/etc/ossec.conf
+# Set:
+<address>10.0.2.52</address>
+
+# Restart agent
+sudo systemctl enable wazuh-agent
+sudo systemctl start wazuh-agent
+
+# Verify logs
+sudo tail -f /var/ossec/logs/ossec.log
+
+
+---------------------------------
+WINDOWS SERVER
+---------------------------------
+
+# Install Wazuh agent
+msiexec.exe /i wazuh-agent-4.6.0-1.msi /q WAZUH_MANAGER="10.0.2.52"
+
+# Start service
+Start-Service WazuhSvc
+
+# Verify service
+Get-Service WazuhSvc
+
+# Check logs
+Get-Content "C:\Program Files (x86)\ossec-agent\ossec.log" -Tail 20
+
+
+---------------------------------
+WINDOWS EVENT LOGS
+---------------------------------
+
+# Open Event Viewer
+eventvwr
+
+# Navigate:
+Windows Logs → Security
+
+# Filter:
+Event ID = 4625# Nmap Scan
 nmap 3.20.114.27
 
 # SSH Brute Force
