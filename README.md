@@ -4,37 +4,9 @@
 
 ## 🧩 Architecture Diagram
 
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/61b83a14-936c-4715-9386-9163955bd117" />
 
-    Attacker (Kali Linux)
-    ─────────────────────
-    Tools: Nmap, Hydra
-            │
-            ▼
- ┌───────────────────────┐
- │     Target Systems     │
- ├───────────────────────┤
- │ Ubuntu Server (SSH)   │
- │ - /var/log/auth.log   │
- │                       │
- │ Windows Server (RDP)  │
- │ - Event ID 4625       │
- └──────────┬────────────┘
-            │
-            ▼
-    ┌───────────────────┐
-    │   Wazuh Server     │
-    │ (SIEM - Ubuntu)    │
-    │ - Log ingestion    │
-    │ - Detection rules  │
-    └──────────┬────────┘
-               │
-               ▼
-    ┌───────────────────┐
-    │ Wazuh Dashboard    │
-    │ Alerts & Analysis  │
-    └───────────────────┘
-
-    
+ 
 ---
 
 ## 📌 Overview
