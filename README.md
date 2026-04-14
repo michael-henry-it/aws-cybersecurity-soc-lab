@@ -4,9 +4,8 @@
 
 ## 🧩 Architecture Diagram
 
-<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/61b83a14-936c-4715-9386-9163955bd117" />
+architecture-diagram.png
 
- 
 ---
 
 ## 📌 Overview
