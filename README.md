@@ -2,20 +2,20 @@
 
 ---
 
-## 🧩 Architecture Diagram
+## Architecture Diagram
 
 ![Architecture Diagram](architecture-diagram.png)
 
 ---
 
-## 📌 Overview
+## Overview
 
-This project demonstrates a full Security Operations Center (SOC) lab built in AWS.  
-It simulates real-world brute-force attacks against Linux and Windows systems and validates detection using a centralized Wazuh SIEM.
+This project demonstrates a cloud-based Security Operations Center (SOC) lab environment built in AWS using Wazuh SIEM for centralized monitoring, log collection, and security event detection across Windows and Linux systems.
 
+The lab simulates real-world attack scenarios including SSH and RDP brute-force attempts and validates detection through centralized SIEM alerting and log correlation workflows.
 ---
 
-## 🧭 Lab Workflow (Actual Execution Order)
+## Lab Workflow (Actual Execution Order)
 
 1. Build AWS infrastructure (EC2 instances + networking)
 2. Configure target systems (Ubuntu + Windows Server)
@@ -27,23 +27,24 @@ It simulates real-world brute-force attacks against Linux and Windows systems an
 
 ---
 
-## 🧱 Environment Setup
+## Environment Architecture
+Attacker System
+Kali Linux
+Hydra
+Nmap
 
-### 🔹 Attacker
-- Kali Linux (Ubuntu-based)
-- Tools: Nmap, Hydra
+## Target Systems
+Ubuntu Server (SSH + Apache)
+Windows Server 2022 (RDP Enabled)
 
-### 🔹 Targets
-- Ubuntu Server (SSH + Apache)
-- Windows Server 2022 (RDP enabled)
-
-### 🔹 SIEM
-- Wazuh Server (Ubuntu)
-- Wazuh Dashboard (HTTPS)
+## SIEM Platform
+Wazuh Manager
+Wazuh Dashboard
+Wazuh Agents
 
 ---
 
-## ⚙️ Technologies Used
+## Technologies Used
 
 - AWS EC2
 - Wazuh SIEM (Manager, Agents, Dashboard)
@@ -55,11 +56,11 @@ It simulates real-world brute-force attacks against Linux and Windows systems an
 
 ---
 
-# 🔐 Attack Simulation & Detection (STEP-BY-STEP)
+# Attack Simulation & Detection (STEP-BY-STEP)
 
 ---
 
-## 🐉 1. Reconnaissance (Kali)
+## 1. Reconnaissance (Kali)
 
 - Identified open ports using Nmap
 - Discovered:
@@ -71,7 +72,7 @@ It simulates real-world brute-force attacks against Linux and Windows systems an
 
 ---
 
-## 🐉 2. SSH Brute Force Attack (Ubuntu)
+## 2. SSH Brute Force Attack (Ubuntu)
 
 - Tool: Hydra
 - Target: Ubuntu SSH
@@ -81,7 +82,7 @@ It simulates real-world brute-force attacks against Linux and Windows systems an
 
 ---
 
-## 🐧 3. Linux Log Validation
+## 3. Linux Log Validation
 
 - Checked `/var/log/auth.log`
 - Observed multiple failed login attempts
@@ -90,7 +91,7 @@ It simulates real-world brute-force attacks against Linux and Windows systems an
 
 ---
 
-## 🐉 4. RDP Brute Force Attack (Windows)
+## 4. RDP Brute Force Attack (Windows)
 
 - Tool: Hydra
 - Target: Windows RDP
@@ -99,7 +100,7 @@ It simulates real-world brute-force attacks against Linux and Windows systems an
 
 ---
 
-## 🪟 5. Windows Log Validation
+## 5. Windows Log Validation
 
 - Opened Event Viewer → Security Logs
 - Filtered for:
@@ -108,7 +109,7 @@ It simulates real-world brute-force attacks against Linux and Windows systems an
 
 ---
 
-## 🧠 6. SIEM Detection (Wazuh)
+## 6. SIEM Detection (Wazuh)
 
 All logs were ingested and correlated in Wazuh:
 
@@ -123,7 +124,7 @@ All logs were ingested and correlated in Wazuh:
 
 ---
 
-# 🔎 Detection Details
+# Detection Details
 
 ## Linux (Ubuntu)
 - Log: `/var/log/auth.log`
@@ -140,7 +141,7 @@ All logs were ingested and correlated in Wazuh:
 
 ---
 
-# 📊 SIEM Capabilities Demonstrated
+# SIEM Capabilities Demonstrated
 
 - Centralized log collection (Linux + Windows)
 - Real-time brute-force detection
@@ -150,7 +151,7 @@ All logs were ingested and correlated in Wazuh:
 
 ---
 
-# 🛠️ Challenges & Fixes (REAL EXPERIENCE)
+# Challenges & Fixes (REAL EXPERIENCE)
 
 - Fixed Wazuh agent misconfiguration (`0.0.0.0` issue)
 - Resolved agent version mismatch errors
@@ -160,7 +161,7 @@ All logs were ingested and correlated in Wazuh:
 
 ---
 
-# 🧠 SOC Analyst Perspective
+# SOC Analyst Perspective
 
 If this were a real SOC environment:
 
@@ -172,7 +173,7 @@ If this were a real SOC environment:
 
 ---
 
-# 🚨 Detection Improvement Idea
+# Detection Improvement Idea
 
 - Alert if >5 failed logins within 1 minute
 - Correlate across Linux + Windows
@@ -180,7 +181,7 @@ If this were a real SOC environment:
 
 ---
 
-# 📁 Screenshot Structure
+# Screenshot Structure
 
 /screenshots
 ├── 01-attacker-kali
@@ -190,7 +191,7 @@ If this were a real SOC environment:
 
 ---
 
-# 💬 Summary
+# Summary
 
 This lab demonstrates the full SOC workflow:
 
