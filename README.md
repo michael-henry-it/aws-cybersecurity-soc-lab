@@ -15,6 +15,41 @@ This project demonstrates a cloud-based Security Operations Center (SOC) lab env
 The lab simulates real-world attack scenarios including SSH and RDP brute-force attempts and validates detection through centralized SIEM alerting and log correlation workflows.
 ---
 
+## Environment Architecture
+
+## Attacker System
+
+- Kali Linux
+- Hydra
+- Nmap
+
+## Target Systems
+
+- Ubuntu Server (SSH + Apache)
+- Windows Server 2022 (RDP Enabled)
+
+## SIEM Platform
+
+- Wazuh Manager
+- Wazuh Dashboard
+- Wazuh Agents
+
+---
+
+## Technologies Used
+
+- AWS EC2
+- AWS VPC
+- Wazuh SIEM
+- Ubuntu Linux
+- Windows Server 2022
+- Hydra
+- Nmap
+- SSH
+- RDP
+- Windows Event Viewer
+---
+
 ## Lab Workflow (Actual Execution Order)
 
 1. Build AWS infrastructure (EC2 instances + networking)
@@ -25,58 +60,31 @@ The lab simulates real-world attack scenarios including SSH and RDP brute-force 
 6. Validate logs on each target system
 7. Confirm detection inside Wazuh dashboard
 
----
-
-## Environment Architecture
-Attacker System
-Kali Linux
-Hydra
-Nmap
-
-## Target Systems
-Ubuntu Server (SSH + Apache)
-Windows Server 2022 (RDP Enabled)
-
-## SIEM Platform
-Wazuh Manager
-Wazuh Dashboard
-Wazuh Agents
-
----
-
-## Technologies Used
-
-- AWS EC2
-- Wazuh SIEM (Manager, Agents, Dashboard)
-- Ubuntu Linux
-- Windows Server 2022
-- Hydra (Brute-force tool)
-- Nmap (Network scanning)
-- SSH / RDP
-
----
-
 # Attack Simulation & Detection (STEP-BY-STEP)
 
 ---
 
-## 1. Reconnaissance (Kali)
+## 1. Network Reconnaissance
 
-- Identified open ports using Nmap
-- Discovered:
-  - SSH (22) on Ubuntu
-  - RDP (3389) on Windows
+Nmap scanning identified exposed services and attack surfaces including:
+
+SSH (22) on Ubuntu
+RDP (3389) on Windows Server
 
 ![Nmap Scan Ubuntu](screenshots/01-attacker-kali/nmap-scan-ubuntu.png)
 ![Nmap Scan Windows](screenshots/01-attacker-kali/nmap-scan-windows.png)
 
 ---
 
-## 2. SSH Brute Force Attack (Ubuntu)
+## 2. SSH Brute Force Simulation
 
-- Tool: Hydra
-- Target: Ubuntu SSH
-- Wordlist: rockyou.txt
+Hydra was used to simulate brute-force authentication attempts against the Ubuntu SSH service.
+
+## Log Validation
+
+Linux authentication failures were confirmed through:
+
+/var/log/auth.log
 
 ![Hydra SSH Attack](screenshots/01-attacker-kali/hydra-ssh-attack.png)
 
@@ -91,10 +99,16 @@ Wazuh Agents
 
 ---
 
-## 4. RDP Brute Force Attack (Windows)
+## 4. RDP Brute Force Simulation
 
-- Tool: Hydra
-- Target: Windows RDP
+Hydra was used to simulate brute-force attempts against Windows RDP services.
+
+## Log Validation
+
+Windows authentication failures were analyzed using:
+
+Windows Event Viewer
+Event ID 4625
 
 ![Hydra RDP Attack](screenshots/01-attacker-kali/hydra-rdp-attack.png)
 
@@ -109,13 +123,14 @@ Wazuh Agents
 
 ---
 
-## 6. SIEM Detection (Wazuh)
+## 6. SIEM Monitoring and Detection
 
-All logs were ingested and correlated in Wazuh:
+Wazuh successfully ingested, correlated, and alerted on:
 
-- SSH brute-force detected (Linux)
-- RDP brute-force detected (Windows)
-- Source attacker IP identified
+- SSH brute-force activity
+- RDP brute-force attempts
+- Source IP identification
+- Authentication failures across Linux and Windows systems
 
 ![Wazuh Dashboard](screenshots/04-wazuh-siem/wazuh-dashboard-login.png)
 ![Agents Active](screenshots/04-wazuh-siem/wazuh-agents-active.png)
@@ -125,61 +140,74 @@ All logs were ingested and correlated in Wazuh:
 ---
 
 # Detection Details
+# Ubuntu Linux
+- Log Source: /var/log/auth.log
+- Detection: Failed SSH authentication attempts
+- Result: Wazuh alert generation and event correlation
 
-## Linux (Ubuntu)
-- Log: `/var/log/auth.log`
-- Detection: Failed SSH login attempts
-- Result: Alert generated in Wazuh
-
----
-
-## Windows Server
-- Log: Windows Security Logs
+# Windows Server 2022
+- Log Source: Windows Security Logs
 - Event ID: 4625
-- Detection: Failed RDP login attempts
-- Result: Alert generated in Wazuh
-
+- Detection: Failed RDP authentication attempts
+- Result: Wazuh alert generation and centralized visibility
 ---
 
 # SIEM Capabilities Demonstrated
 
-- Centralized log collection (Linux + Windows)
+- Centralized log collection
+- Endpoint visibility and monitoring
 - Real-time brute-force detection
 - Cross-platform log correlation
+- Security alert analysis
 - Source IP tracking
-- Dashboard-based alert visualization
+- Dashboard-based monitoring workflows
 
 ---
 
-# Challenges & Fixes (REAL EXPERIENCE)
+# Troubleshooting and Operational Challenges
 
-- Fixed Wazuh agent misconfiguration (`0.0.0.0` issue)
-- Resolved agent version mismatch errors
-- Enabled SSH password authentication for testing
-- Configured AWS Security Groups (22, 3389, 1514, 443)
-- Troubleshot service failures and connectivity issues
+During deployment and testing, several infrastructure and configuration issues were identified and resolved, including:
+
+- Wazuh agent misconfiguration (0.0.0.0)
+- Agent version compatibility issues
+- SSH authentication configuration
+- AWS Security Group configuration
+- Service availability and connectivity troubleshooting
+---
+
+# Incident Response Considerations
+
+In a production SOC environment, additional response actions would include:
+
+Investigating attacker IP reputation
+Correlating activity across systems
+Reviewing successful authentication attempts following failures
+Applying account lockout policies
+Escalating potential lateral movement activity
 
 ---
 
-# SOC Analyst Perspective
+# Detection Enhancement Opportunities
 
-If this were a real SOC environment:
+Potential future improvements include:
 
-- Investigate attacker IP reputation
-- Correlate activity across systems
-- Check for successful login after failures
-- Apply account lockout policies
-- Escalate if lateral movement suspected
-
+- Alert thresholds for repeated failed logins
+- Cross-system event correlation
+- False-positive reduction tuning
+- Automated response workflows
 ---
 
-# Detection Improvement Idea
-
-- Alert if >5 failed logins within 1 minute
-- Correlate across Linux + Windows
-- Reduce false positives and improve detection accuracy
-
----
+# Skills Demonstrated
+- Security Information and Event Management (SIEM)
+- AWS Infrastructure Deployment
+- Linux Administration
+- Windows Event Analysis
+- Network Traffic Analysis
+- Endpoint Monitoring
+- Security Alert Correlation
+- Incident Detection and Investigation
+- Log Analysis
+- Infrastructure Troubleshooting
 
 # Screenshot Structure
 
@@ -193,9 +221,9 @@ If this were a real SOC environment:
 
 # Summary
 
-This lab demonstrates the full SOC workflow:
+This project demonstrates a complete SOC monitoring workflow:
 
-Attack → Log Generation → Log Collection → SIEM Detection → Alert Analysis
+Attack Simulation → Log Generation → Log Collection → SIEM Detection → Alert Investigation
 
 ---
 
