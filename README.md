@@ -71,8 +71,8 @@ Nmap scanning identified exposed services and attack surfaces including:
 SSH (22) on Ubuntu
 RDP (3389) on Windows Server
 
-![Nmap Scan Ubuntu](screenshots/01-attacker-kali/nmap-scan-ubuntu.png)
-![Nmap Scan Windows](screenshots/01-attacker-kali/nmap-scan-windows.png)
+![Nmap Scan Ubuntu](screenshots/01-kali/nmap-scan-ubuntu.png)
+![Nmap Scan Windows](screenshots/01-kali/nmap-scan-windows.png)
 
 ---
 
@@ -86,7 +86,7 @@ Linux authentication failures were confirmed through:
 
 /var/log/auth.log
 
-![Hydra SSH Attack](screenshots/01-attacker-kali/hydra-ssh-attack.png)
+![Hydra SSH Attack](screenshots/01-kali/hydra-ssh-attack.png)
 
 ---
 
@@ -95,7 +95,7 @@ Linux authentication failures were confirmed through:
 - Checked `/var/log/auth.log`
 - Observed multiple failed login attempts
 
-![Ubuntu Auth Logs](screenshots/02-target-ubuntu/ubuntu-auth-log-failures.png)
+![Ubuntu Auth Logs](screenshots/02-ubuntu/ubuntu-auth-log-failures.png)
 
 ---
 
@@ -110,7 +110,7 @@ Windows authentication failures were analyzed using:
 Windows Event Viewer
 Event ID 4625
 
-![Hydra RDP Attack](screenshots/01-attacker-kali/hydra-rdp-attack.png)
+![Hydra RDP Attack](screenshots/01-kali/hydra-rdp-attack.png)
 
 ---
 
@@ -119,7 +119,7 @@ Event ID 4625
 - Opened Event Viewer → Security Logs
 - Filtered for:
 
-![Windows 4625 Logs](screenshots/03-target-windows/windows-4625-failures.png)
+![Windows 4625 Logs](screenshots/03-windows-server/windows-4625-failures.png)
 
 ---
 
@@ -132,10 +132,10 @@ Wazuh successfully ingested, correlated, and alerted on:
 - Source IP identification
 - Authentication failures across Linux and Windows systems
 
-![Wazuh Dashboard](screenshots/04-wazuh-siem/wazuh-dashboard-login.png)
-![Agents Active](screenshots/04-wazuh-siem/wazuh-agents-active.png)
-![SSH Detection](screenshots/04-wazuh-siem/wazuh-ssh-detection.png)
-![RDP Detection](screenshots/04-wazuh-siem/wazuh-rdp-detection.png)
+![Wazuh Dashboard](screenshots/04-wazuh/wazuh-dashboard-login.png)
+![Agents Active](screenshots/04-wazuh/wazuh-agents-active.png)
+![SSH Detection](screenshots/04-wazuh/wazuh-ssh-detection.png)
+![RDP Detection](screenshots/04-wazuh/wazuh-rdp-detection.png)
 
 ---
 
@@ -212,10 +212,10 @@ Potential future improvements include:
 # Screenshot Structure
 
 /screenshots
-├── 01-attacker-kali
-├── 02-target-ubuntu
-├── 03-target-windows
-├── 04-wazuh-siem
+├── 01-kali
+├── 02-ubuntu
+├── 03-windows-server
+├── 04-wazuh
 
 ---
 
