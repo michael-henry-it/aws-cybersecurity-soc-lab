@@ -209,14 +209,6 @@ Potential future improvements include:
 - Log Analysis
 - Infrastructure Troubleshooting
 
-# Screenshot Structure
-
-/screenshots
-├── 01-kali
-├── 02-ubuntu
-├── 03-windows-server
-├── 04-wazuh
-
 ---
 
 # Summary
